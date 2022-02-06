@@ -1,0 +1,39 @@
+  const CreateProduct = () => {
+    const img = document.getElementById('input_imagen')
+    const categoria = document.getElementById('input_select').value
+    const precio = document.getElementById('precioInput').value
+    const marca = document.getElementById('marcaInput').value
+    const descripcion = document.getElementById('descripcionInput').value
+    const venta = document.getElementById('ventaInput').value
+    const cantidadP = document.getElementById('disponiblesInput').value
+
+    const ruta = img.files[0]
+    // const form = document.getElementById('my-form-data')
+    const formData = new FormData()
+    formData.append('imagen', ruta)
+    formData.append('categoria', categoria)
+    console.log('formData : ', formData)
+    // const data = { url: ruta, category: categoria, preci: precio, marca: marca, descrip: descripcion, venta: venta, cantidadP: cantidadP }
+    fetch('/queryProducto', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        accept: 'multipart/form-data'
+
+      }
+    }).then(res => res.json())
+      .catch(error => console.error('Error:', error))
+      .then(res => console.log(res))
+  }
+
+
+
+  const strorage = multer.diskStorage({
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+const subir = multer({
+  strorage,
+  dest: path.join(__dirname, '../../App/Media')
+}).single('imagen')
